@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tutorial</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik Puddles">
+</head>
+
+<body>
+
+    <h1 style="color: silver;font-family: Rubik Puddles;">GDSC - Firebase Basic Tutorial</h1>
+    <br><br>
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <form autocomplete="on">
+        <div class="input">
+            <input type="text" class="form-control" placeholder="Name" aria-label="First name" id="Name" required>
+        </div>
+        <div class="input">
+            <input type="text" class="form-control" placeholder="Message" aria-label="Last name" id="Msg" required>
+        </div>
+        <button id="submit-btn">Submit</button>
+    </form>
+
+
+    <br>
+    <br>
+
+    <div id="table">
+        <h1 style="color: silver;font-family: Rubik Puddles;">DataBase</h1>
+
+        <br><br>
+        <table id="my-table">
+            <thead>
+                <th>Name</th>
+                <th>Message</th>
+            </thead>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+</body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+    import { getFirestore, addDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js'
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyAmHkqFdbfLszr1X8gIavy9P2zPxWK0HzU",
+        authDomain: "fireb-c0a12.firebaseapp.com",
+        projectId: "fireb-c0a12",
+        storageBucket: "fireb-c0a12.appspot.com",
+        messagingSenderId: "416429879637",
+        appId: "1:416429879637:web:26166647276f51ce0d7fdc",
+        measurementId: "G-0RP1E7YBSM"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    document.getElementById("submit-btn").onclick = async function (e) {
+        e.preventDefault()
+        const docRef = await addDoc(collection(db, "data"), {
+            Name: document.getElementById('Name').value,
+            Message: document.getElementById('Msg').value
+        });
+        console.log("Document written with ID: ", docRef.id);
+        alert("Form submitted")
+        location.reload()
+    };
+    window.onload = async function () {
+        const querySnapshot = await getDocs(collection(db, "data"));
+        querySnapshot.forEach((doc) => {
+            const row = document.getElementById("tbody").insertRow(0);
+            row.insertCell(0).innerHTML = doc.data().Name
+            row.insertCell(-1).innerHTML = doc.data().Message
+        });
+    }
+</script>
+
+</html>
